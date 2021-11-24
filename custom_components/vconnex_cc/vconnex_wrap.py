@@ -15,6 +15,7 @@ from homeassistant.helpers.dispatcher import dispatcher_send
 from .const import (
     CONF_CLIENT_ID,
     CONF_CLIENT_SECRET,
+    CONF_ENDPOINT,
     DEFAULT_ENDPOINT,
     DOMAIN,
     PROJECT_CODE,
@@ -37,7 +38,7 @@ async def init_sdk(
 ) -> HomeAssistantVconnexData | None:
     """Init vconnex sdk."""
     api = VconnexAPI(
-        endpoint=DEFAULT_ENDPOINT,
+        endpoint=entry.data[CONF_ENDPOINT],
         client_id=entry.data[CONF_CLIENT_ID],
         client_secret=entry.data[CONF_CLIENT_SECRET],
         project_code=PROJECT_CODE,

@@ -15,6 +15,7 @@ from homeassistant.exceptions import HomeAssistantError
 from .const import (
     CONF_CLIENT_ID,
     CONF_CLIENT_SECRET,
+    CONF_ENDPOINT,
     CONF_PROJECT_NAME,
     CONF_USER_ID,
     DEFAULT_ENDPOINT,
@@ -35,8 +36,9 @@ def validate_input(
     """Validate the user input allows us to connect."""
     client_id = user_input.get(CONF_CLIENT_ID, "").strip()
     client_secret = user_input.get(CONF_CLIENT_SECRET, "").strip()
+    endpoint = user_input.get(CONF_ENDPOINT, "").strip()
 
-    if "" in (client_id, client_secret):
+    if "" in (client_id, client_secret, endpoint):
         raise InvalidCredentials
 
     if (
@@ -47,9 +49,7 @@ def validate_input(
         raise CredentialsUsed
 
     try:
-        api = VconnexAPI(
-            DEFAULT_ENDPOINT, client_id, client_secret, project_code=PROJECT_CODE
-        )
+        api = VconnexAPI(endpoint, client_id, client_secret, project_code=PROJECT_CODE)
         if not api.is_valid():
             LOGGER.error("Can't validate user credentials: %s", client_id)
             raise InvalidCredentials
@@ -71,6 +71,7 @@ def validate_input(
     return {
         "title": f"[{DOMAIN_NAME}] {project_name}",
         "data": {
+            CONF_ENDPOINT: endpoint,
             CONF_CLIENT_ID: client_id,
             CONF_CLIENT_SECRET: client_secret,
             CONF_PROJECT_NAME: project_name,
@@ -123,6 +124,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(
                         CONF_CLIENT_SECRET,
                         default=user_input.get(CONF_CLIENT_SECRET),
+                    ): str,
+                    vol.Required(
+                        CONF_ENDPOINT,
+                        default=user_input.get(CONF_ENDPOINT),
                     ): str,
                 }
             ),

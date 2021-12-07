@@ -1,10 +1,10 @@
 {
   "domain": "vconnex_cc",
   "name": "Vconnex CC",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "config_flow": true,
   "documentation": "https://github.com/vconnex/vconnex-home-assistant",
-  "requirements": ["vconnex.py==1.0.5"],
+  "requirements": ["vconnex.py==1.0.6"],
   "ssdp": [],
   "zeroconf": [],
   "homekit": {},
